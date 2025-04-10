@@ -143,8 +143,8 @@ def result():
             })
             continue
 
-        # Wait 1 second before fetching carrier details (only for carrier details fetch)
-        time.sleep(1)
+        # Wait half a second before fetching carrier details (only for carrier details fetch)
+        time.sleep(0.5)
 
         # Fetch carrier details for the USDOT number
         carrier_detail = fetch_carrier_details(usdot)
