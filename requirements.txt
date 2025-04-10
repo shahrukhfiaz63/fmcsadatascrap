@@ -1,0 +1,4 @@
+Flask
+requests
+PyPDF2
+beautifulsoup4
