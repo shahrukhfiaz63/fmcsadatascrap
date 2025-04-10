@@ -73,7 +73,6 @@ def fetch_usdot(mc):
         if res.status_code != 200:
             return {"error": f"FMCSA rejected the request for MC: {mc}", "status": res.status_code}
 
-        # The regular expression expects only a numeric part for the USDOT number
         match = re.search(r'USDOT Number:.*?(\d{4,8})', res.text)
         usdot = match.group(1) if match else None
         return {"mc": mc, "usdot": usdot}
@@ -144,8 +143,8 @@ def result():
             })
             continue
 
-        # Wait 3 seconds before fetching carrier details (only for carrier details fetch)
-        time.sleep(3)
+        # Wait 1 second before fetching carrier details (only for carrier details fetch)
+        time.sleep(1)
 
         # Fetch carrier details for the USDOT number
         carrier_detail = fetch_carrier_details(usdot)
