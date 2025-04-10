@@ -52,9 +52,16 @@ def parse_pdf_for_mc(date):
 
 def fetch_usdot(mc):
     """
-    Given an MC number, fetch the corresponding USDOT number from the FMCSA query.
+    Given an MC number, fetch the corresponding USDOT number.
+    The function strips the 'MC-' prefix to send only the numeric part.
     """
-    url = f"https://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=MC_MX&original_query_param=NAME&query_string={mc}"
+    # Remove the "MC-" prefix
+    if mc.startswith("MC-"):
+        mc_numeric = mc.replace("MC-", "")
+    else:
+        mc_numeric = mc
+
+    url = f"https://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=MC_MX&original_query_param=NAME&query_string={mc_numeric}"
     headers = {
         "User-Agent": "Mozilla/5.0",
         "Referer": "https://safer.fmcsa.dot.gov/",
@@ -66,6 +73,7 @@ def fetch_usdot(mc):
         if res.status_code != 200:
             return {"error": f"FMCSA rejected the request for MC: {mc}", "status": res.status_code}
 
+        # The regular expression expects only a numeric part for the USDOT number
         match = re.search(r'USDOT Number:.*?(\d{4,8})', res.text)
         usdot = match.group(1) if match else None
         return {"mc": mc, "usdot": usdot}
